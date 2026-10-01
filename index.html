@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KANISHKA ENTERPRISES - Festive Offer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 15px;
+        }
+        .card {
+            background: linear-gradient(180deg, #ffffff 0%, #fff8e7 100%);
+            width: 330px;
+            padding: 24px 18px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            text-align: center;
+            position: relative;
+            border: 3px solid #ffd700;
+        }
+        .shop-name {
+            font-family: 'Montserrat', sans-serif;
+            color: #b71c1c;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0 0 8px 0;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .festive-tag {
+            background: linear-gradient(90deg, #d32f2f, #b71c1c);
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+            border: 1px solid #ffd700;
+        }
+        .sub-title {
+            color: #0d47a1;
+            margin-top: 0;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .scratch-container {
+            position: relative;
+            width: 260px;
+            height: 130px;
+            margin: 15px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 2px solid #ffd700;
+        }
+        .reward {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ffffff, #ffe082);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+        .reward .congrats { font-size: 14px; color: #333; }
+        .reward span { font-size: 36px; color: #b71c1c; font-weight: 900; text-shadow: 1px 1px 0px #fff; }
+        .reward .desc { font-size: 13px; color: #0d47a1; }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        .instruction {
+            font-weight: bold;
+            font-size: 13px;
+            color: #d32f2f;
+            margin-top: 8px;
+        }
+        .footer-text {
+            font-size: 11px;
+            color: #444;
+            margin-top: 15px;
+            line-height: 1.5;
+            background: #fff3e0;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed #ff1744;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="shop-name">🏢 KANISHKA ENTERPRISES 🏢</div>
+    <div class="festive-tag">🪔 दुर्गा पूजा, धनतेरस, दीपावली एवं छठ पूजा 🪔</div>
+    <div class="sub-title">विशेष ग्राहक डिस्काउंट स्क्रैच कार्ड</div>
+    
+    <div class="scratch-container">
+        <div class="reward">
+            <div class="congrats">🎉 बधाई हो! आपने जीता 🎉</div>
+            <span id="amount">₹000</span>
+            <div class="desc">का विशेष कैश डिस्काउंट!</div>
+        </div>
+        <canvas id="scratch" width="260" height="130"></canvas>
+    </div>
+
+    <div id="instruction" class="instruction">👇 यहाँ उंगली से स्क्रैच करें!</div>
+    
+    <div class="footer-text">
+        📍 <b>स्थान:</b> बाराहाट, मेहरमा, गोड्डा (झारखंड) - 814160<br>
+        *यह ऑफर सीमित अवधि एवं नियम व शर्तों के अधीन मान्य है।
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('scratch');
+    const ctx = canvas.getContext('2d');
+    const amountElem = document.getElementById('amount');
+    const instructionElem = document.getElementById('instruction');
+
+    // 1000 Total Pool Exact Quantities
+    function getRandomWeightedReward() {
+        const pool = [
+            ...Array(1).fill(1000),
+            ...Array(2).fill(950),
+            ...Array(3).fill(900),
+            ...Array(4).fill(850),
+            ...Array(5).fill(800),
+            ...Array(6).fill(750),
+            ...Array(7).fill(700),
+            ...Array(8).fill(650),
+            ...Array(8).fill(600),
+            ...Array(9).fill(550),
+            ...Array(10).fill(500),
+            ...Array(11).fill(450),
+            ...Array(25).fill(400),
+            ...Array(50).fill(350),
+            ...Array(75).fill(300),
+            ...Array(100).fill(250),
+            ...Array(175).fill(200),
+            ...Array(200).fill(150),
+            ...Array(309).fill(100)
+        ];
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    let savedReward = localStorage.getItem('kanishka_scratch_reward_v3');
+
+    if (savedReward) {
+        amountElem.innerText = '₹' + savedReward;
+        canvas.style.display = 'none';
+        instructionElem.innerText = '❌ आप पहले ही अपना डिस्काउंट स्क्रैच कर चुके हैं!';
+    } else {
+        const selectedReward = getRandomWeightedReward();
+        amountElem.innerText = '₹' + selectedReward;
+
+        // Premium Metallic Golden Layer
+        let grad = ctx.createLinearGradient(0, 0, 260, 130);
+        grad.addColorStop(0, '#B8860B');
+        grad.addColorStop(0.5, '#FFD700');
+        grad.addColorStop(1, '#DAA520');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.font = 'bold 16px Arial';
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎁 स्क्रैच करें और जीतें 🎁', canvas.width / 2, canvas.height / 2 + 5);
+
+        let isDrawing = false;
+        let scratchedPixels = 0;
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+            const y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            scratchedPixels++;
+            if (scratchedPixels > 8 && !localStorage.getItem('kanishka_scratch_reward_v3')) {
+                localStorage.setItem('kanishka_scratch_reward_v3', selectedReward);
+            }
+        }
+
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+
+        canvas.addEventListener('touchstart', () => isDrawing = true);
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', scratch);
+    }
+</script>
+
+</body>
+</html>
